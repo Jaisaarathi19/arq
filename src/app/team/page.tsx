@@ -1,3 +1,4 @@
+
 import type { NextPage } from 'next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -114,4 +115,3 @@ const TeamPage: NextPage = () => {
 };
 
 export default TeamPage;
-```

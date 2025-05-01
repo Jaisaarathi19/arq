@@ -59,4 +59,3 @@ const GalleryPage: NextPage = () => {
 };
 
 export default GalleryPage;
-```
