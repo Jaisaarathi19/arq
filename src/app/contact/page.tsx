@@ -1,3 +1,4 @@
+
 'use client'; // Required for form handling
 
 import type { NextPage } from 'next';
@@ -179,4 +180,3 @@ const ContactPage: NextPage = () => {
 };
 
 export default ContactPage;
-```
