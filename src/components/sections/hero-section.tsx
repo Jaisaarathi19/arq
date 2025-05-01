@@ -13,9 +13,11 @@ const HeroSection: React.FC = () => {
   const pointsRef = React.useRef<THREE.Points | null>(null);
 
   React.useEffect(() => {
-    if (!mountRef.current || typeof window === 'undefined') return;
+    // Avoid running Three.js code on the server
+    if (typeof window === 'undefined') return;
 
     const currentMount = mountRef.current;
+    if (!currentMount) return;
 
     // --- Three.js Setup ---
     const scene = new THREE.Scene();
@@ -70,6 +72,9 @@ const HeroSection: React.FC = () => {
     window.addEventListener('mousemove', onMouseMove);
 
     const animate = () => {
+      // Ensure renderer exists before calling requestAnimationFrame
+      if (!rendererRef.current) return;
+
       requestAnimationFrame(animate);
 
       // Particle animation (subtle movement)
@@ -79,10 +84,10 @@ const HeroSection: React.FC = () => {
       }
 
       // Camera movement based on mouse
-      if (cameraRef.current) {
+      if (cameraRef.current && sceneRef.current) {
           cameraRef.current.position.x += (mouseX * 0.5 - cameraRef.current.position.x) * 0.02;
           cameraRef.current.position.y += (mouseY * 0.5 - cameraRef.current.position.y) * 0.02;
-          cameraRef.current.lookAt(scene.position); // Keep looking at the center
+          cameraRef.current.lookAt(sceneRef.current.position); // Keep looking at the center
       }
 
 
@@ -105,8 +110,12 @@ const HeroSection: React.FC = () => {
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', onMouseMove);
-      if (rendererRef.current && currentMount) {
-        currentMount.removeChild(rendererRef.current.domElement);
+      // Check if renderer and mount exist before cleanup
+      if (rendererRef.current && currentMount && rendererRef.current.domElement) {
+         // Check if domElement is still a child before removing
+         if (currentMount.contains(rendererRef.current.domElement)) {
+            currentMount.removeChild(rendererRef.current.domElement);
+         }
       }
       // Dispose Three.js objects if necessary (geometry, material, textures)
       if (pointsRef.current) {
@@ -116,10 +125,15 @@ const HeroSection: React.FC = () => {
         } else {
            pointsRef.current.material.dispose();
         }
+        sceneRef.current?.remove(pointsRef.current); // Remove from scene
+        pointsRef.current = null;
       }
       rendererRef.current?.dispose();
+      rendererRef.current = null; // Nullify ref
+      cameraRef.current = null;
+      sceneRef.current = null;
     };
-  }, []);
+  }, []); // Empty dependency array ensures this runs once on mount
 
   return (
     <section
@@ -135,7 +149,7 @@ const HeroSection: React.FC = () => {
 
       {/* Content Overlay */}
       <div className="relative z-10 flex flex-col items-center text-center text-foreground px-4">
-        {/* Animated Text Effect (Placeholder) */}
+        {/* Animated Text Effect */}
         <h1 className="font-heading text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-extrabold mb-4 animate-fadeInUp">
           <span className="text-primary">A</span>
           <span className="text-secondary-foreground">R</span>
@@ -160,25 +174,5 @@ const HeroSection: React.FC = () => {
   );
 };
 
-// Basic Fade-in Animation Keyframes (add to globals.css or use Tailwind variants)
-// Ensure you have the necessary keyframes and animation utilities in globals.css or tailwind.config.js
-/*
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-.animate-fadeInUp {
-  animation: fadeInUp 0.8s ease-out forwards;
-  opacity: 0; /* Start hidden */
-}
-.delay-200 { animation-delay: 0.2s; }
-.delay-400 { animation-delay: 0.4s; }
-*/
 
 export default HeroSection;

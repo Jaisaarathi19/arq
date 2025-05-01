@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -6,23 +7,26 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu, Binary } from 'lucide-react'; // Using Binary for logo
 import { cn } from '@/lib/utils';
+import { usePathname } from 'next/navigation'; // Import usePathname
 
 interface NavItem {
   href: string;
   label: string;
+  isPageLink?: boolean; // Flag to indicate if it's a page link (vs. section link)
 }
 
 const navItems: NavItem[] = [
-  { href: '#hero', label: 'Home' },
-  { href: '#about', label: 'About' },
-  { href: '#events', label: 'Events' },
-  // { href: '#team', label: 'Team' },
-  // { href: '#gallery', label: 'Gallery' },
-  // { href: '#contact', label: 'Contact' },
+  { href: '/', label: 'Home', isPageLink: true },
+  { href: '/#about', label: 'About' },
+  { href: '/#events', label: 'Events' },
+  { href: '/team', label: 'Team', isPageLink: true },
+  { href: '/gallery', label: 'Gallery', isPageLink: true },
+  { href: '/contact', label: 'Contact', isPageLink: true },
 ];
 
 const SiteHeader: React.FC = () => {
   const [isScrolled, setIsScrolled] = React.useState(false);
+  const pathname = usePathname(); // Get current path
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -33,12 +37,14 @@ const SiteHeader: React.FC = () => {
   }, []);
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-     if (href.startsWith('#')) {
+     // Only prevent default and scroll for hash links on the homepage
+     if (href.startsWith('/#') && pathname === '/') {
         e.preventDefault();
-        const targetId = href.substring(1);
+        const targetId = href.substring(2); // Remove '/#'
         const targetElement = document.getElementById(targetId);
         targetElement?.scrollIntoView({ behavior: 'smooth' });
      }
+     // For other links (page links or hash links on different pages), let NextLink handle it.
   };
 
   return (
@@ -50,7 +56,7 @@ const SiteHeader: React.FC = () => {
     >
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
-        <Link href="#hero" className="flex items-center space-x-2" onClick={(e) => scrollToSection(e, '#hero')}>
+        <Link href="/" className="flex items-center space-x-2" >
            <Binary className="h-7 w-7 text-primary" />
           <span className="font-heading text-2xl font-bold text-foreground">ARQ</span>
         </Link>
@@ -61,7 +67,11 @@ const SiteHeader: React.FC = () => {
             <Link
               key={item.href}
               href={item.href}
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+              className={cn(
+                  "text-sm font-medium transition-colors hover:text-primary",
+                  // Highlight active page link (excluding hash links for now)
+                  item.isPageLink && pathname === item.href ? "text-primary" : "text-muted-foreground"
+              )}
               onClick={(e) => scrollToSection(e, item.href)}
             >
               {item.label}
@@ -79,16 +89,21 @@ const SiteHeader: React.FC = () => {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[250px] bg-background">
-              <nav className="flex flex-col space-y-4 pt-8">
-                <Link href="#hero" className="flex items-center space-x-2 mb-6 pl-4" onClick={(e) => {scrollToSection(e, '#hero'); document.querySelector<HTMLButtonElement>('[data-radix-dialog-close]')?.click()}}>
+               <SheetTrigger asChild>
+                 <Link href="/" className="flex items-center space-x-2 mb-6 pl-4 pt-8">
                     <Binary className="h-6 w-6 text-primary" />
                     <span className="font-heading text-xl font-bold text-foreground">ARQ</span>
                  </Link>
+                </SheetTrigger>
+              <nav className="flex flex-col space-y-4">
                 {navItems.map((item) => (
                    <SheetTrigger key={item.href} asChild>
                         <Link
                         href={item.href}
-                        className="text-lg font-medium text-muted-foreground hover:text-primary pl-4"
+                         className={cn(
+                            "text-lg font-medium hover:text-primary pl-4",
+                             item.isPageLink && pathname === item.href ? "text-primary" : "text-muted-foreground"
+                         )}
                         onClick={(e) => scrollToSection(e, item.href)}
                         >
                         {item.label}
@@ -105,3 +120,4 @@ const SiteHeader: React.FC = () => {
 };
 
 export default SiteHeader;
+```

@@ -1,3 +1,4 @@
+
 import type {Metadata} from 'next';
 import { Inter, Syne } from 'next/font/google'; // Import Inter and Syne
 import './globals.css';
@@ -32,12 +33,16 @@ export default function RootLayout({
       {/* Apply fonts and dark theme default */}
       <body
         className={cn(
-          'min-h-screen bg-background font-sans antialiased dark', // Set dark theme by default
+          'min-h-screen bg-background font-sans antialiased dark flex flex-col', // Set dark theme, ensure flex column for footer
           fontSans.variable,
           fontHeading.variable // Add heading font variable
         )}
       >
-        {children}
+        {/* Header is now included within specific pages */}
+        <main className="flex-grow"> {/* Add main tag here */}
+            {children}
+        </main>
+        {/* Footer is now included within specific pages */}
         <Toaster /> {/* Add Toaster for notifications */}
       </body>
     </html>

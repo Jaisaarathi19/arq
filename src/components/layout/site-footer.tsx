@@ -1,9 +1,25 @@
+
+'use client';
+
 import type { FC } from 'react';
 import Link from 'next/link';
-import { Binary, Mail, Linkedin, Github } from 'lucide-react'; // Example icons
+import { Binary, Mail, Linkedin, Github } from 'lucide-react';
+import { usePathname } from 'next/navigation'; // Import usePathname
 
 const SiteFooter: FC = () => {
   const currentYear = new Date().getFullYear();
+  const pathname = usePathname();
+
+  // Client-side function for smooth scrolling to top only on homepage
+  const handleScrollToTop = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (pathname === '/') {
+      e.preventDefault();
+      const targetElement = document.getElementById('hero');
+      targetElement?.scrollIntoView({ behavior: 'smooth' });
+    }
+    // On other pages, let the Link component handle navigation to '/'
+  };
+
 
   return (
     <footer className="bg-secondary border-t border-border py-8 text-muted-foreground">
@@ -11,7 +27,8 @@ const SiteFooter: FC = () => {
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           {/* Logo and Copyright */}
           <div className="flex flex-col items-center md:items-start">
-             <Link href="#hero" className="flex items-center space-x-2 mb-2" onClick={(e) => { e.preventDefault(); document.getElementById('hero')?.scrollIntoView({behavior: 'smooth'}) }}>
+             {/* Link to #hero on homepage, / on other pages */}
+             <Link href={pathname === '/' ? '#hero' : '/'} className="flex items-center space-x-2 mb-2" onClick={handleScrollToTop}>
                 <Binary className="h-6 w-6 text-primary" />
                 <span className="font-heading text-xl font-bold text-foreground">ARQ</span>
             </Link>
