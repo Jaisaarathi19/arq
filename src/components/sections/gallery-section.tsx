@@ -1,8 +1,7 @@
-import type { NextPage } from 'next';
+
+import type { FC } from 'next';
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
-import SiteHeader from '@/components/layout/site-header';
-import SiteFooter from '@/components/layout/site-footer';
 
 interface GalleryImage {
   id: number;
@@ -24,15 +23,13 @@ const galleryImages: GalleryImage[] = [
   { id: 9, imageUrl: 'https://picsum.photos/600/405', alt: 'Data Visualization Display', imageHint: 'data visualization screen' },
 ];
 
-const GalleryPage: NextPage = () => {
+const GallerySection: FC = () => {
   return (
-    <div className="flex flex-col min-h-screen">
-      <SiteHeader />
-      <main className="flex-grow pt-24 pb-16 md:pt-32 md:pb-24 bg-secondary">
+     <section id="gallery" className="py-16 md:py-24 bg-secondary"> {/* Added id and styling */}
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-6xl font-heading font-bold text-center mb-12 md:mb-16 text-primary">
+          <h2 className="text-4xl md:text-5xl font-heading font-bold text-center mb-12 md:mb-16 text-primary">
             Gallery
-          </h1>
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {galleryImages.map((image) => (
               <Card key={image.id} className="overflow-hidden border-border bg-card shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-lg">
@@ -52,10 +49,8 @@ const GalleryPage: NextPage = () => {
             ))}
           </div>
         </div>
-      </main>
-      <SiteFooter />
-    </div>
+      </section>
   );
 };
 
-export default GalleryPage;
+export default GallerySection;

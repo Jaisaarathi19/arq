@@ -1,7 +1,7 @@
 
 'use client'; // Required for form handling
 
-import type { NextPage } from 'next';
+import type { FC } from 'next';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -10,9 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useToast } from "@/hooks/use-toast"; // Import useToast
-import SiteHeader from '@/components/layout/site-header';
-import SiteFooter from '@/components/layout/site-footer';
+import { useToast } from "@/hooks/use-toast";
 import { Mail, MapPin } from 'lucide-react';
 
 // Define the form schema using Zod
@@ -25,7 +23,7 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-const ContactPage: NextPage = () => {
+const ContactSection: FC = () => {
   const { toast } = useToast(); // Initialize useToast
 
   const form = useForm<FormData>({
@@ -52,13 +50,11 @@ const ContactPage: NextPage = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <SiteHeader />
-      <main className="flex-grow pt-24 pb-16 md:pt-32 md:pb-24 bg-background">
+    <section id="contact" className="py-16 md:py-24 bg-background"> {/* Added id and styling */}
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-6xl font-heading font-bold text-center mb-12 md:mb-16 text-primary">
+          <h2 className="text-4xl md:text-5xl font-heading font-bold text-center mb-12 md:mb-16 text-primary">
             Contact Us
-          </h1>
+          </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-start">
             {/* Contact Information */}
@@ -173,10 +169,8 @@ const ContactPage: NextPage = () => {
             </Card>
           </div>
         </div>
-      </main>
-      <SiteFooter />
-    </div>
+      </section>
   );
 };
 
-export default ContactPage;
+export default ContactSection;

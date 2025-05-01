@@ -1,11 +1,9 @@
 
-import type { NextPage } from 'next';
+import type { FC } from 'next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Linkedin, Github } from 'lucide-react';
 import Link from 'next/link';
-import SiteHeader from '@/components/layout/site-header';
-import SiteFooter from '@/components/layout/site-footer';
 
 interface TeamMember {
   id: number;
@@ -72,15 +70,13 @@ const teamMembers: TeamMember[] = [
   },
 ];
 
-const TeamPage: NextPage = () => {
+const TeamSection: FC = () => {
   return (
-    <div className="flex flex-col min-h-screen">
-      <SiteHeader />
-      <main className="flex-grow pt-24 pb-16 md:pt-32 md:pb-24 bg-background">
+    <section id="team" className="py-16 md:py-24 bg-background"> {/* Added id and styling */}
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-6xl font-heading font-bold text-center mb-12 md:mb-16 text-primary">
+          <h2 className="text-4xl md:text-5xl font-heading font-bold text-center mb-12 md:mb-16 text-primary">
             Meet the Team
-          </h1>
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
             {teamMembers.map((member) => (
               <Card key={member.id} className="bg-card border-border shadow-md overflow-hidden text-center transition-transform duration-300 hover:scale-105 hover:shadow-xl">
@@ -108,10 +104,8 @@ const TeamPage: NextPage = () => {
             ))}
           </div>
         </div>
-      </main>
-      <SiteFooter />
-    </div>
+      </section>
   );
 };
 
-export default TeamPage;
+export default TeamSection;
