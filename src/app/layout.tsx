@@ -18,7 +18,7 @@ const fontHeading = Syne({ // Use Syne for headings
 });
 
 export const metadata: Metadata = {
-  title: 'ARQ Digital Nexus', // Updated title
+  title: 'ARQ', // Updated title
   description: 'Website for ARQ Data Science Club at Rajalakshmi Engineering College', // Updated description
 };
 
