@@ -5,7 +5,8 @@ import * as React from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, Binary } from 'lucide-react'; // Using Binary for logo
+import { Menu } from 'lucide-react';
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation'; // Import usePathname
 
@@ -70,11 +71,10 @@ const SiteHeader: React.FC = () => {
         isScrolled ? 'bg-background/80 backdrop-blur-sm shadow-md' : 'bg-transparent'
       )}
     >
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
+      <div className="container mx-auto flex h-16 items-center justify-between px-4 py-8">
         {/* Logo */}
-        <Link href="/" className="flex items-center space-x-2" onClick={(e) => scrollToSection(e, '/')}>
-           <Binary className="h-7 w-7 text-primary" />
-          <span className="font-heading text-2xl font-bold text-foreground">ARQ</span>
+        <Link href="/" className="flex items-center space-x-2 my-6" onClick={(e) => scrollToSection(e, '/')}>
+          <Image src="/ARQLOGO.png" alt="ARQ Logo" width={100} height={100} className="text-primary" />
         </Link>
 
         {/* Desktop Navigation */}
@@ -107,8 +107,8 @@ const SiteHeader: React.FC = () => {
             <SheetContent side="right" className="w-[250px] bg-background">
                {/* Keep SheetTrigger wrapping Link to allow closing via X button */}
                <SheetTrigger asChild>
-                 <Link href="/" className="flex items-center space-x-2 mb-6 pl-4 pt-8" onClick={(e) => scrollToSection(e, '/')}>
-                    <Binary className="h-6 w-6 text-primary" />
+                 <Link href="/" className="flex items-center space-x-2 mb-6 pl-4 pt-4 my-2" onClick={(e) => scrollToSection(e, '/')}>
+                    <Image src="/ARQLOGO.png" alt="ARQ Logo" width={24} height={24} className="text-primary" />
                     <span className="font-heading text-xl font-bold text-foreground">ARQ</span>
                  </Link>
                 </SheetTrigger>
